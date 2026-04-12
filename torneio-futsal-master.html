@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Torneio Futsal Master 30Tões 2026</title>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -968,17 +971,15 @@
       <!-- Reset / Dados -->
       <div class="admin-content" id="admin-reset">
         <div class="resultado-form" id="config-box">
-          <h3>🔗 CONFIGURAR GOOGLE SHEETS</h3>
-          <p style="color:rgba(255,255,255,0.6);font-size:0.88rem;margin-bottom:14px;">Cole abaixo a URL do seu Apps Script para ativar a sincronização em nuvem.</p>
-          <div class="input-group">
-            <label>URL do Apps Script</label>
-            <input type="text" id="input-sheets-url" placeholder="https://script.google.com/macros/s/.../exec" style="font-size:0.82rem;">
+          <h3>🔥 STATUS FIREBASE</h3>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.88rem;margin-bottom:14px;">Banco de dados em tempo real — qualquer alteração aparece instantaneamente em todos os dispositivos.</p>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:8px;">
+            <span style="font-size:1.2rem;">🟢</span>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:#6ee0a5;">Conectado ao Firebase</div>
+              <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:2px;">Projeto: futsalmaster2026 • Firestore Database</div>
+            </div>
           </div>
-          <div style="display:flex;gap:10px;margin-top:8px;">
-            <button class="btn btn-success btn-sm" onclick="salvarSheetURL()">💾 Salvar URL</button>
-            <button class="btn btn-outline btn-sm" onclick="testarConexao()">🔌 Testar</button>
-          </div>
-          <p id="url-status" style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.4);"></p>
         </div>
         <div class="resultado-form">
           <h3>⚠️ GERENCIAR DADOS</h3>
@@ -1116,75 +1117,87 @@ const REGULAMENTO = [
 const ADMIN_PWD = 'master2026';
 
 // ============================================================
-//  CONFIG — cole aqui a URL do seu Apps Script após publicar
+//  FIREBASE CONFIG
 // ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFvW_0DM46jhC9UVZ3gWKY4mpZ1vaXn4SEgNy1f9-Lm6SG0_zBVln7F8oq1OerwLBaeg/exec'; // Cole sua URL aqui
+const firebaseConfig = {
+  apiKey: "AIzaSyD7LZERpNfYw8c1rOAyUWOsZIstELNYpcs",
+  authDomain: "futsalmaster2026.firebaseapp.com",
+  projectId: "futsalmaster2026",
+  storageBucket: "futsalmaster2026.firebasestorage.app",
+  messagingSenderId: "91404700853",
+  appId: "1:91404700853:web:b0cf390e1566d847e1c2fc"
+};
 
-// ============================================================
-//  STATE — Google Sheets + cache local
-// ============================================================
+// Firebase SDK via CDN (carregado no <head>)
+let db = null;
 
-let _cache = null;
-
-function getCache() {
-  if (_cache) return _cache;
-  try { _cache = JSON.parse(localStorage.getItem('tfm_resultados') || '{}'); } catch(e) { _cache = {}; }
-  return _cache;
+function initFirebase() {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    setLoading(false);
+    console.log('Firebase conectado!');
+  } catch(e) {
+    console.error('Erro Firebase:', e);
+  }
 }
-function setCache(r) {
-  _cache = r;
-  localStorage.setItem('tfm_resultados', JSON.stringify(r));
-}
+
+// ============================================================
+//  STATE — Firebase Firestore + cache local
+// ============================================================
+
+let _cache = {};
+
+function getCache() { return _cache; }
+function setCache(r) { _cache = r; }
 
 async function fetchResultados() {
-  if (!APPS_SCRIPT_URL) { setLoading(false); return getCache(); }
+  if (!db) return _cache;
   try {
     setLoading(true);
-    const res = await fetch(APPS_SCRIPT_URL + '?action=get', {cache:'no-store'});
-    const data = await res.json();
-    if (data && data.resultados) setCache(data.resultados);
-  } catch(e) { console.warn('Sheets offline, usando cache local:', e); }
+    const doc = await db.collection('torneio').doc('resultados').get();
+    if (doc.exists) {
+      _cache = doc.data() || {};
+    }
+  } catch(e) { console.warn('Firestore offline:', e); }
   finally { setLoading(false); }
-  return getCache();
+  return _cache;
 }
 
 async function postResultado(jid, gol1, gol2) {
-  const r = getCache();
-  r[jid] = {gol1, gol2};
-  setCache(r);
-  if (!APPS_SCRIPT_URL) return true;
+  _cache[jid] = {gol1, gol2};
+  if (!db) return true;
   try {
-    const url = `${APPS_SCRIPT_URL}?action=set&jid=${encodeURIComponent(jid)}&gol1=${gol1}&gol2=${gol2}`;
-    const res = await fetch(url, {cache:'no-store'});
-    const data = await res.json();
-    return data.ok === true;
-  } catch(e) { return false; }
+    await db.collection('torneio').doc('resultados').set(
+      { [jid]: {gol1, gol2} },
+      { merge: true }
+    );
+    return true;
+  } catch(e) { console.error('Erro ao salvar:', e); return false; }
 }
 
 async function deleteResultado(jid) {
-  const r = getCache(); delete r[jid]; setCache(r);
-  if (!APPS_SCRIPT_URL) return true;
+  delete _cache[jid];
+  if (!db) return true;
   try {
-    const url = `${APPS_SCRIPT_URL}?action=delete&jid=${encodeURIComponent(jid)}`;
-    const res = await fetch(url, {cache:'no-store'});
-    const data = await res.json();
-    return data.ok === true;
-  } catch(e) { return false; }
+    await db.collection('torneio').doc('resultados').update({
+      [jid]: firebase.firestore.FieldValue.delete()
+    });
+    return true;
+  } catch(e) { console.error('Erro ao deletar:', e); return false; }
 }
 
 async function resetTudo() {
-  setCache({});
-  if (!APPS_SCRIPT_URL) return true;
+  _cache = {};
+  if (!db) return true;
   try {
-    const url = `${APPS_SCRIPT_URL}?action=reset`;
-    const res = await fetch(url, {cache:'no-store'});
-    const data = await res.json();
-    return data.ok === true;
-  } catch(e) { return false; }
+    await db.collection('torneio').doc('resultados').set({});
+    return true;
+  } catch(e) { console.error('Erro ao resetar:', e); return false; }
 }
 
 function getRodadas() {
-  const res = getCache();
+  const res = _cache;
   return RODADAS_ORIG.map(rod => ({
     ...rod,
     jogos: rod.jogos.map(j => ({
@@ -1202,7 +1215,7 @@ function setLoading(on) {
     el.textContent = '🔄 Sincronizando...';
     el.style.color = 'rgba(245,197,24,0.8)';
   } else {
-    el.textContent = '🟢 Google Sheets';
+    el.textContent = '🟢 Firebase';
     el.style.color = '#6ee0a5';
   }
 }
@@ -1212,6 +1225,20 @@ async function syncAll() {
   renderClassificacao();
   renderJogos();
   if (adminLoggedIn) renderAdminJogos();
+}
+
+// Listener em tempo real — atualiza automaticamente para todos
+function startRealtimeListener() {
+  if (!db) return;
+  db.collection('torneio').doc('resultados').onSnapshot(doc => {
+    if (doc.exists) {
+      _cache = doc.data() || {};
+      renderClassificacao();
+      renderJogos();
+      if (adminLoggedIn) renderAdminJogos();
+      setLoading(false);
+    }
+  });
 }
 
 // ============================================================
