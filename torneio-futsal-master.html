@@ -805,7 +805,7 @@
     <button class="nav-btn" onclick="showPage('elencos')"><span class="nav-icon">👥</span> Elencos</button>
     <button class="nav-btn" onclick="showPage('regulamento')"><span class="nav-icon">📋</span> Regulamento</button>
     <button class="nav-btn admin-nav-btn" onclick="showPage('admin')"><span class="nav-icon">🔒</span> Admin</button>
-    <div style="margin-left:auto;display:flex;align-items:center;padding:0 16px;"><span id="sync-status" style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;color:#6ee0a5;">🟢 Google Sheets</span></div>
+    <div style="margin-left:auto;display:flex;align-items:center;padding:0 16px;"><span id="sync-status" style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;color:#6ee0a5;">🟢 Firebase</span></div>
   </div>
 </nav>
 
@@ -1517,7 +1517,7 @@ async function salvarResultado() {
   renderAdminJogos();
   renderClassificacao();
   renderJogos();
-  showToast(ok ? '✅ Salvo no Google Sheets!' : '✅ Salvo localmente!');
+  showToast(ok ? '✅ Salvo no Firebase!' : '⚠️ Erro ao salvar!');
 }
 
 async function limparResultado() {
@@ -1624,7 +1624,7 @@ async function testarConexao() {
     if (data && data.resultados !== undefined) {
       document.getElementById('url-status').textContent = '🟢 Conexão OK! Sheets respondeu com sucesso.';
       document.getElementById('url-status').style.color = '#6ee0a5';
-      showToast('🟢 Conectado ao Google Sheets!');
+      showToast('🟢 Conectado ao Firebase!');
     } else {
       throw new Error('resposta inesperada');
     }
