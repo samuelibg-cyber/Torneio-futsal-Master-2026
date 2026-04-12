@@ -802,7 +802,7 @@
     <button class="nav-btn" onclick="showPage('elencos')"><span class="nav-icon">👥</span> Elencos</button>
     <button class="nav-btn" onclick="showPage('regulamento')"><span class="nav-icon">📋</span> Regulamento</button>
     <button class="nav-btn admin-nav-btn" onclick="showPage('admin')"><span class="nav-icon">🔒</span> Admin</button>
-    <div style="margin-left:auto;display:flex;align-items:center;padding:0 16px;"><span id="sync-status" style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;color:rgba(245,197,24,0.6);">🟡 Modo local</span></div>
+    <div style="margin-left:auto;display:flex;align-items:center;padding:0 16px;"><span id="sync-status" style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:1px;color:#6ee0a5;">🟢 Google Sheets</span></div>
   </div>
 </nav>
 
@@ -1202,8 +1202,8 @@ function setLoading(on) {
     el.textContent = '🔄 Sincronizando...';
     el.style.color = 'rgba(245,197,24,0.8)';
   } else {
-    el.textContent = APPS_SCRIPT_URL ? '🟢 Google Sheets' : '🟡 Modo local';
-    el.style.color = APPS_SCRIPT_URL ? '#6ee0a5' : 'rgba(245,197,24,0.6)';
+    el.textContent = '🟢 Google Sheets';
+    el.style.color = '#6ee0a5';
   }
 }
 
@@ -1582,14 +1582,9 @@ function renderAdminStats() {
 // ============================================================
 
 function salvarSheetURL() {
-  const url = document.getElementById('input-sheets-url').value.trim();
-  if (!url) { showToast('⚠️ Cole a URL primeiro'); return; }
-  // Atualiza a constante em runtime via workaround
-  window._sheetsURL = url;
-  localStorage.setItem('tfm_sheets_url', url);
-  document.getElementById('url-status').textContent = '✅ URL salva! Recarregue a página para ativar.';
+  showToast('✅ URL já está configurada no código!');
+  document.getElementById('url-status').textContent = '✅ URL já embutida no sistema. Clique em Testar para verificar.';
   document.getElementById('url-status').style.color = '#6ee0a5';
-  showToast('✅ URL salva! Recarregue a página.');
 }
 
 async function testarConexao() {
@@ -1636,12 +1631,13 @@ function showToast(msg) {
   setCache(r);
 })();
 
-// Carregar URL salva do localStorage
+// URL já embutida no código
 (function loadSavedURL(){
-  const saved = localStorage.getItem('tfm_sheets_url');
-  if (saved) {
-    const inp = document.getElementById('input-sheets-url');
-    if (inp) inp.value = saved;
+  const inp = document.getElementById('input-sheets-url');
+  if (inp) {
+    inp.value = APPS_SCRIPT_URL;
+    inp.setAttribute('readonly', true);
+    inp.style.opacity = '0.6';
   }
 })();
 
