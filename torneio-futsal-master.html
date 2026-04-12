@@ -1133,12 +1133,19 @@ let db = null;
 
 function initFirebase() {
   try {
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     db = firebase.firestore();
+    // Habilita persistência offline
+    db.enablePersistence({synchronizeTabs: true}).catch(err => {
+      console.warn('Persistência offline não disponível:', err.code);
+    });
     setLoading(false);
-    console.log('Firebase conectado!');
+    console.log('✅ Firebase conectado! Projeto:', firebaseConfig.projectId);
   } catch(e) {
-    console.error('Erro Firebase:', e);
+    console.error('❌ Erro Firebase:', e);
+    setLoading(false);
   }
 }
 
@@ -1229,15 +1236,22 @@ async function syncAll() {
 
 // Listener em tempo real — atualiza automaticamente para todos
 function startRealtimeListener() {
-  if (!db) return;
+  if (!db) {
+    // Tenta novamente em 2s se db ainda não estiver pronto
+    setTimeout(startRealtimeListener, 2000);
+    return;
+  }
   db.collection('torneio').doc('resultados').onSnapshot(doc => {
-    if (doc.exists) {
-      _cache = doc.data() || {};
-      renderClassificacao();
-      renderJogos();
-      if (adminLoggedIn) renderAdminJogos();
-      setLoading(false);
-    }
+    _cache = doc.exists ? (doc.data() || {}) : {};
+    renderClassificacao();
+    renderJogos();
+    if (adminLoggedIn) renderAdminJogos();
+    setLoading(false);
+    console.log('🔄 Dados atualizados do Firebase:', Object.keys(_cache).length, 'jogos');
+  }, err => {
+    console.error('❌ Erro no listener:', err);
+    // Tenta reconectar em 5s
+    setTimeout(startRealtimeListener, 5000);
   });
 }
 
@@ -1494,7 +1508,7 @@ function preencherJogo() {
   if (!jogo) return;
   document.getElementById('label-time1').textContent = nomeTime(jogo.t1);
   document.getElementById('label-time2').textContent = nomeTime(jogo.t2);
-  const res = getResultados();
+  const res = getCache();
   if (res[jid]) {
     document.getElementById('gols-time1').value = res[jid].gol1;
     document.getElementById('gols-time2').value = res[jid].gol2;
@@ -1535,7 +1549,7 @@ async function limparResultado() {
 function renderAdminJogos() {
   const list = document.getElementById('jogos-list-admin');
   if (!list) return;
-  const res = getResultados();
+  const res = getCache();
   list.innerHTML = '';
   RODADAS_ORIG.forEach(rod => {
     rod.jogos.forEach(j => {
@@ -1672,11 +1686,13 @@ renderElencos();
 renderRegulamento();
 checkAdminState();
 
-// Carrega dados do Sheets e renderiza
-syncAll();
-
-// Auto-refresh a cada 60s para visitantes verem resultados atualizados
-setInterval(() => { if (!adminLoggedIn) syncAll(); }, 60000);
+// Inicializa Firebase + listener em tempo real
+initFirebase();
+startRealtimeListener();
+syncAll().then(() => {
+  renderClassificacao();
+  renderJogos();
+});
 
 </script>
 </body>
