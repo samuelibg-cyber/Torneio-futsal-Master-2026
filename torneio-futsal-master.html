@@ -1154,10 +1154,8 @@ async function postResultado(jid, gol1, gol2) {
   setCache(r);
   if (!APPS_SCRIPT_URL) return true;
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'set', jid, gol1, gol2})
-    });
+    const url = `${APPS_SCRIPT_URL}?action=set&jid=${encodeURIComponent(jid)}&gol1=${gol1}&gol2=${gol2}`;
+    const res = await fetch(url, {cache:'no-store'});
     const data = await res.json();
     return data.ok === true;
   } catch(e) { return false; }
@@ -1167,10 +1165,8 @@ async function deleteResultado(jid) {
   const r = getCache(); delete r[jid]; setCache(r);
   if (!APPS_SCRIPT_URL) return true;
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'delete', jid})
-    });
+    const url = `${APPS_SCRIPT_URL}?action=delete&jid=${encodeURIComponent(jid)}`;
+    const res = await fetch(url, {cache:'no-store'});
     const data = await res.json();
     return data.ok === true;
   } catch(e) { return false; }
@@ -1180,10 +1176,8 @@ async function resetTudo() {
   setCache({});
   if (!APPS_SCRIPT_URL) return true;
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'reset'})
-    });
+    const url = `${APPS_SCRIPT_URL}?action=reset`;
+    const res = await fetch(url, {cache:'no-store'});
     const data = await res.json();
     return data.ok === true;
   } catch(e) { return false; }
