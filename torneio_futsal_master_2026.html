@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torneio Futsal Master 30Tões 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a3a8f;
+    --blue-dark: #0d2260;
+    --blue-light: #2756d4;
+    --gold: #f5c518;
+    --gold-dark: #d4a017;
+    --white: #ffffff;
+    --gray: #e8eaf0;
+    --red: #c0392b;
+    --green: #27ae60;
+    --text-dark: #0a1a4a;
+    --shadow: 0 8px 32px rgba(10,26,74,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: #070e2b;
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(135deg, #070e2b 0%, #0d2260 60%, #1a3a8f 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(245,197,24,0.12) 0%, transparent 70%);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 18px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-logo {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 16px rgba(245,197,24,0.4));
+  }
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .header-text h1 span { color: var(--gold); }
+  .header-text p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.65);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .header-badge {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .header-badge .date-badge {
+    background: var(--gold);
+    color: var(--blue-dark);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    background: var(--blue-dark);
+    border-bottom: 2px solid rgba(245,197,24,0.3);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+  }
+  .nav-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    position: relative;
+  }
+  .nav-btn:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+  .nav-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+    background: rgba(245,197,24,0.08);
+  }
+  .nav-btn .nav-icon { margin-right: 6px; }
+  .admin-nav-btn {
+    margin-left: auto;
+    color: rgba(245,197,24,0.7) !important;
+  }
+  .admin-nav-btn.active { color: var(--gold) !important; }
+
+  /* ===== MAIN ===== */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== CARDS ===== */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, rgba(245,197,24,0.5), transparent);
+  }
+
+  /* ===== CLASSIFICATION TABLE ===== */
+  .table-card {
+    background: linear-gradient(135deg, rgba(26,58,143,0.4) 0%, rgba(13,34,96,0.6) 100%);
+    border: 1px solid rgba(245,197,24,0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+  }
+  .table-header {
+    background: linear-gradient(90deg, var(--blue-dark), var(--blue));
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .table-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th {
+    background: rgba(13,34,96,0.8);
+    color: var(--gold);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  thead th:first-child { text-align: left; padding-left: 20px; }
+  tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: rgba(245,197,24,0.06); }
+  tbody td {
+    padding: 12px 12px;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+  tbody td:first-child { text-align: left; padding-left: 20px; }
+  .rank-cell {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    width: 36px;
+    color: var(--gold);
+  }
+  .team-name-cell {
+    font-weight: 700;
+    color: var(--white) !important;
+    font-size: 1.05rem;
+  }
+  .pts-cell {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--gold) !important;
+  }
+  tr:nth-child(1) .rank-cell { color: #ffd700; }
+  tr:nth-child(2) .rank-cell { color: #c0c0c0; }
+  tr:nth-child(3) .rank-cell { color: #cd7f32; }
+  tr:nth-child(4) { border-bottom: 2px dashed rgba(245,197,24,0.4); }
+  .qual-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+  .qual-green { background: rgba(39,174,96,0.3); color: #6ee0a5; border: 1px solid rgba(39,174,96,0.4); }
+  .qual-gray { background: rgba(120,120,150,0.2); color: #aaa; border: 1px solid rgba(150,150,180,0.3); }
+
+  /* ===== JOGOS ===== */
+  .jogos-grid {
+    display: grid;
+    gap: 14px;
+  }
+  .rodada-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding: 8px 0 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .jogo-card {
+    background: linear-gradient(135deg, rgba(26,58,143,0.35) 0%, rgba(13,34,96,0.5) 100%);
+    border: 1px solid rgba(245,197,24,0.15);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .jogo-card:hover { border-color: rgba(245,197,24,0.35); background: linear-gradient(135deg, rgba(26,58,143,0.5) 0%, rgba(13,34,96,0.7) 100%); }
+  .jogo-card.played { border-color: rgba(39,174,96,0.25); }
+  .jogo-card.upcoming { opacity: 0.75; }
+  .jogo-date {
+    min-width: 60px;
+    text-align: center;
+  }
+  .jogo-date .day { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--gold); line-height: 1; }
+  .jogo-date .month { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .jogo-date .weekday { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; color: rgba(255,255,255,0.35); }
+  .jogo-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.1); }
+  .jogo-teams {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .jogo-team {
+    flex: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .jogo-team.away { text-align: right; }
+  .jogo-score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 90px;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.9rem;
+    color: var(--white);
+    line-height: 1;
+    min-width: 28px;
+    text-align: center;
+  }
+  .score-num.winner { color: var(--gold); }
+  .score-sep {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.3);
+  }
+  .score-vs {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+  }
+  .jogo-status {
+    min-width: 70px;
+    text-align: right;
+  }
+  .status-pill {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .status-played { background: rgba(39,174,96,0.2); color: #6ee0a5; border: 1px solid rgba(39,174,96,0.35); }
+  .status-upcoming { background: rgba(26,58,143,0.4); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+  .status-folga { background: rgba(245,197,24,0.1); color: rgba(245,197,24,0.6); border: 1px solid rgba(245,197,24,0.2); font-size: 0.6rem; }
+
+  /* ===== ELENCOS ===== */
+  .times-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  .time-card {
+    background: linear-gradient(135deg, rgba(26,58,143,0.3) 0%, rgba(13,34,96,0.5) 100%);
+    border: 1px solid rgba(245,197,24,0.2);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .time-header {
+    background: linear-gradient(90deg, var(--blue-dark), var(--blue-light));
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--gold);
+  }
+  .time-header h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+  .time-players {
+    padding: 12px 0;
+  }
+  .player-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.82);
+    transition: background 0.1s;
+  }
+  .player-row:last-child { border-bottom: none; }
+  .player-row:hover { background: rgba(255,255,255,0.04); }
+  .player-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    color: var(--gold);
+    opacity: 0.5;
+    min-width: 16px;
+  }
+  .gol-badge {
+    margin-left: auto;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(245,197,24,0.12);
+    color: var(--gold);
+    border: 1px solid rgba(245,197,24,0.25);
+    font-weight: 700;
+  }
+
+  /* ===== REGULAMENTO ===== */
+  .reg-grid { display: grid; gap: 14px; }
+  .reg-article {
+    background: rgba(26,58,143,0.2);
+    border: 1px solid rgba(245,197,24,0.12);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+  }
+  .reg-article h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .reg-article p, .reg-article li {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.6;
+  }
+  .reg-article ul { padding-left: 18px; margin-top: 6px; }
+  .reg-article li { margin-bottom: 3px; }
+
+  /* ===== FASE FINAL ===== */
+  .fase-final-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 12px;
+  }
+  .final-card {
+    background: linear-gradient(135deg, rgba(26,58,143,0.35) 0%, rgba(13,34,96,0.5) 100%);
+    border: 1px solid rgba(245,197,24,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .final-card-header {
+    background: linear-gradient(90deg, var(--red), #922b21);
+    padding: 10px 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    border-bottom: 2px solid rgba(245,197,24,0.4);
+  }
+  .final-card-header.gold-header {
+    background: linear-gradient(90deg, var(--gold-dark), #b8860b);
+    color: var(--text-dark);
+  }
+  .final-match {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .final-match:last-child { border-bottom: none; }
+  .final-date {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+  }
+  .final-match-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  /* ===== ADMIN PANEL ===== */
+  .admin-gate {
+    max-width: 400px;
+    margin: 40px auto;
+    background: rgba(13,34,96,0.6);
+    border: 1px solid rgba(245,197,24,0.3);
+    border-radius: 16px;
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .admin-gate h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .admin-gate p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 24px; }
+  .input-group { margin-bottom: 14px; text-align: left; }
+  .input-group label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(245,197,24,0.2);
+    border-radius: 8px;
+    padding: 11px 14px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-group input:focus, .input-group select:focus {
+    border-color: var(--gold);
+    background: rgba(245,197,24,0.06);
+  }
+  .input-group select option { background: #0d2260; }
+  .btn {
+    background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+    color: var(--text-dark);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.1s;
+    width: 100%;
+  }
+  .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+  }
+  .btn-outline:hover { background: rgba(245,197,24,0.1); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; width: auto; }
+  .btn-danger { background: linear-gradient(90deg, var(--red), #a93226); color: white; }
+  .btn-success { background: linear-gradient(90deg, var(--green), #1e8449); color: white; }
+
+  /* Admin Dashboard */
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+  .admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245,197,24,0.2);
+  }
+  .admin-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .admin-tab {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .admin-tab.active, .admin-tab:hover {
+    background: rgba(245,197,24,0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .admin-content { display: none; }
+  .admin-content.active { display: block; }
+
+  .resultado-form {
+    background: rgba(13,34,96,0.5);
+    border: 1px solid rgba(245,197,24,0.2);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .resultado-form h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: end;
+  }
+  .form-row .vs-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    padding-bottom: 11px;
+  }
+  .form-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .form-actions { margin-top: 14px; display: flex; gap: 10px; }
+
+  .jogos-list-admin { display: grid; gap: 10px; }
+  .jogo-admin-row {
+    background: rgba(26,58,143,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .jogo-admin-info { flex: 1; min-width: 200px; }
+  .jogo-admin-info .teams {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+  }
+  .jogo-admin-info .date-info {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 2px;
+  }
+  .jogo-admin-score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-input {
+    width: 52px !important;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    padding: 8px 6px !important;
+  }
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: none;
+  }
+  .alert.show { display: block; }
+  .alert-success { background: rgba(39,174,96,0.2); border: 1px solid rgba(39,174,96,0.4); color: #6ee0a5; }
+  .alert-error { background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4); color: #f1948a; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .header-inner { padding: 18px 14px 14px; gap: 14px; }
+    .header-logo { width: 65px; height: 65px; }
+    .header-text h1 { font-size: 2rem; }
+    .header-badge { display: none; }
+    .fase-final-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row .vs-label { display: none; }
+    .times-grid { grid-template-columns: 1fr; }
+    .jogo-card { flex-wrap: wrap; }
+    .nav-btn { padding: 12px 14px; font-size: 0.82rem; }
+    .nav-btn .nav-icon { display: none; }
+  }
+
+  /* Decorative */
+  .pitch-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(245,197,24,0.2), transparent);
+    margin: 24px 0;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: rgba(26,58,143,0.3);
+    border: 1px solid rgba(245,197,24,0.18);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat-box .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-box .lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+  }
+
+  .folga-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--blue-dark);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold);
+    z-index: 9999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- SVG Shield Logo inline -->
+    <svg class="header-logo" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#2756d4"/>
+          <stop offset="100%" style="stop-color:#0d2260"/>
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#f5c518"/>
+          <stop offset="100%" style="stop-color:#d4a017"/>
+        </linearGradient>
+      </defs>
+      <path d="M50 5 L90 22 L90 60 Q90 90 50 105 Q10 90 10 60 L10 22 Z" fill="url(#shieldGrad)" stroke="url(#goldGrad)" stroke-width="3"/>
+      <path d="M50 12 L83 27 L83 60 Q83 85 50 98 Q17 85 17 60 L17 27 Z" fill="none" stroke="rgba(245,197,24,0.3)" stroke-width="1.5"/>
+      <circle cx="50" cy="42" r="16" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="50" y="52" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="11" fill="#f5c518" letter-spacing="1">30TÕES</text>
+      <text x="50" y="80" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" letter-spacing="2">2026</text>
+    </svg>
+    <div class="header-text">
+      <h1>MASTER <span>30TÕES</span></h1>
+      <p>Torneio de Futsal Master &bull; São Francisco do Maranhão</p>
+    </div>
+    <div class="header-badge">
+      <div class="date-badge">09 ABR – 05 MAI 2026</div>
+      <div class="date-badge" style="background: transparent; border: 1px solid rgba(245,197,24,0.4); color: rgba(245,197,24,0.8);">FUTSAL MASTER</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showPage('classificacao')"><span class="nav-icon">🏆</span> Classificação</button>
+    <button class="nav-btn" onclick="showPage('jogos')"><span class="nav-icon">⚽</span> Jogos</button>
+    <button class="nav-btn" onclick="showPage('elencos')"><span class="nav-icon">👥</span> Elencos</button>
+    <button class="nav-btn" onclick="showPage('regulamento')"><span class="nav-icon">📋</span> Regulamento</button>
+    <button class="nav-btn admin-nav-btn" onclick="showPage('admin')"><span class="nav-icon">🔒</span> Admin</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===== CLASSIFICAÇÃO ===== -->
+  <div class="page active" id="page-classificacao">
+    <div class="section-title">🏆 Classificação Geral</div>
+
+    <div class="stats-row" id="stats-row">
+      <!-- preenchido pelo JS -->
+    </div>
+
+    <div class="table-card">
+      <div class="table-header">
+        <span>📊</span>
+        <h3>FASE DE GRUPOS</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="text-align:left;padding-left:20px">EQUIPE</th>
+            <th>PJ</th>
+            <th>V</th>
+            <th>E</th>
+            <th>D</th>
+            <th>GP</th>
+            <th>GC</th>
+            <th>SG</th>
+            <th>PTS</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-body">
+          <!-- preenchido pelo JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pitch-line"></div>
+
+    <div class="section-title">🏅 Fase Final</div>
+    <div class="fase-final-grid">
+      <div class="final-card">
+        <div class="final-card-header">⚔️ SEMIFINAIS – 28/04 (Terça)</div>
+        <div class="final-match">
+          <span class="final-date">Jogo 1</span>
+          <span class="final-match-name">1º Lugar × 4º Lugar</span>
+        </div>
+        <div class="final-match">
+          <span class="final-date">Jogo 2</span>
+          <span class="final-match-name">2º Lugar × 3º Lugar</span>
+        </div>
+      </div>
+      <div class="final-card">
+        <div class="final-card-header gold-header">🏆 FINAL & 3º LUGAR – 05/05 (Terça)</div>
+        <div class="final-match">
+          <span class="final-date">Jogo 1</span>
+          <span class="final-match-name">Disputa 3º Lugar</span>
+        </div>
+        <div class="final-match">
+          <span class="final-date">Jogo 2</span>
+          <span class="final-match-name">Grande Final 🏆</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== JOGOS ===== -->
+  <div class="page" id="page-jogos">
+    <div class="section-title">⚽ Tabela de Jogos</div>
+    <div class="jogos-grid" id="jogos-grid">
+      <!-- preenchido pelo JS -->
+    </div>
+  </div>
+
+  <!-- ===== ELENCOS ===== -->
+  <div class="page" id="page-elencos">
+    <div class="section-title">👥 Elencos dos Times</div>
+    <div class="times-grid" id="times-grid">
+      <!-- preenchido pelo JS -->
+    </div>
+    <div class="pitch-line"></div>
+    <div style="text-align:center; color:rgba(255,255,255,0.35); font-family:'Barlow Condensed',sans-serif; font-size:0.82rem; letter-spacing:2px;">
+      LOCAL: QUADRA DA PRAÇA DA MATRIZ &bull; REALIZAÇÃO: ATLETAS DOS TRINTÕES
+    </div>
+  </div>
+
+  <!-- ===== REGULAMENTO ===== -->
+  <div class="page" id="page-regulamento">
+    <div class="section-title">📋 Regulamento Oficial</div>
+    <div class="reg-grid" id="reg-grid">
+      <!-- preenchido pelo JS -->
+    </div>
+  </div>
+
+  <!-- ===== ADMIN ===== -->
+  <div class="page" id="page-admin">
+
+    <!-- LOGIN GATE -->
+    <div class="admin-gate" id="admin-login">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔐</div>
+      <h2>Área Admin</h2>
+      <p>Insira a senha para acessar o painel de administração</p>
+      <div class="input-group">
+        <label>Senha de Acesso</label>
+        <input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+      </div>
+      <div class="alert alert-error" id="login-error">Senha incorreta. Tente novamente.</div>
+      <button class="btn" onclick="adminLogin()">ENTRAR</button>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div class="admin-panel" id="admin-dashboard">
+      <div class="admin-header">
+        <h2>⚙️ Painel do Administrador</h2>
+        <button class="btn btn-outline btn-sm" onclick="adminLogout()">Sair</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="showAdminTab('resultados')">⚽ Registrar Resultado</button>
+        <button class="admin-tab" onclick="showAdminTab('jogos-admin')">📅 Gerenciar Jogos</button>
+        <button class="admin-tab" onclick="showAdminTab('reset')">🔄 Dados</button>
+      </div>
+
+      <!-- Registrar Resultado -->
+      <div class="admin-content active" id="admin-resultados">
+        <div class="alert alert-success" id="res-success">✅ Resultado salvo com sucesso!</div>
+        <div class="resultado-form">
+          <h3>⚽ LANÇAR RESULTADO DE JOGO</h3>
+          <div class="input-group">
+            <label>Selecionar Jogo</label>
+            <select id="select-jogo" onchange="preencherJogo()">
+              <option value="">— Escolha o jogo —</option>
+            </select>
+          </div>
+          <div class="form-row" style="margin-top:8px;">
+            <div class="input-group" style="margin:0">
+              <label id="label-time1">Time 1</label>
+              <input type="number" id="gols-time1" min="0" max="99" placeholder="0">
+            </div>
+            <div class="vs-label">×</div>
+            <div class="input-group" style="margin:0">
+              <label id="label-time2">Time 2</label>
+              <input type="number" id="gols-time2" min="0" max="99" placeholder="0">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-success" style="width:auto;flex:1" onclick="salvarResultado()">💾 SALVAR RESULTADO</button>
+            <button class="btn btn-danger btn-sm" onclick="limparResultado()">Limpar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gerenciar Jogos -->
+      <div class="admin-content" id="admin-jogos-admin">
+        <h3 style="font-family:'Barlow Condensed',sans-serif; color:var(--gold); margin-bottom:16px; font-size:1.1rem; letter-spacing:1px; font-weight:800;">TODOS OS JOGOS</h3>
+        <div class="jogos-list-admin" id="jogos-list-admin">
+          <!-- preenchido pelo JS -->
+        </div>
+      </div>
+
+      <!-- Reset / Dados -->
+      <div class="admin-content" id="admin-reset">
+        <div class="resultado-form">
+          <h3>⚠️ GERENCIAR DADOS</h3>
+          <p style="color:rgba(255,255,255,0.6); font-size:0.9rem; margin-bottom:18px;">Atenção: as ações abaixo são irreversíveis.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-danger btn-sm" onclick="resetResultados()">🗑️ Limpar Todos os Resultados</button>
+          </div>
+        </div>
+        <div class="resultado-form" style="margin-top:0;">
+          <h3>📊 ESTATÍSTICAS RÁPIDAS</h3>
+          <div id="admin-stats-txt" style="color:rgba(255,255,255,0.7); font-family:'Barlow Condensed',sans-serif; font-size:0.95rem; line-height:2;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+
+const TIMES = [
+  {
+    id: 1, nome: 'Time 1',
+    jogadores: [
+      {nome:'Higino'}, {nome:'Felipe'}, {nome:'Davi'},
+      {nome:'Valdir'}, {nome:'Maylson'},
+      {nome:'Fco Carne'}, {nome:'Vanderson'},
+      {nome:'Denis'}, {nome:'Welyson', gol:true}
+    ]
+  },
+  {
+    id: 2, nome: 'Time 2',
+    jogadores: [
+      {nome:'Adão Militão'}, {nome:'Delson'}, {nome:'Miguel 6º Ponto'},
+      {nome:'Elvis'}, {nome:'Paulin'},
+      {nome:'Adonias'}, {nome:'Alex'},
+      {nome:'Igor'}, {nome:'Shayd', gol:true}
+    ]
+  },
+  {
+    id: 3, nome: 'Time 3',
+    jogadores: [
+      {nome:'Zé Bebidas'}, {nome:'Silas'}, {nome:'Joabes'},
+      {nome:'Lambau'}, {nome:'Samuel'},
+      {nome:'Arthur'}, {nome:'Jhone'},
+      {nome:'Fco Promotoria'}, {nome:'Bismah', gol:true}
+    ]
+  },
+  {
+    id: 4, nome: 'Time 4',
+    jogadores: [
+      {nome:'Marcelo'}, {nome:'Átila'}, {nome:'Rafael Bar'},
+      {nome:'Pedin'}, {nome:'Naylson'},
+      {nome:'Abreu'}, {nome:'Rafael (BS)'},
+      {nome:'Junin'}, {nome:'Segundo', gol:true}
+    ]
+  },
+  {
+    id: 5, nome: 'Time 5',
+    jogadores: []
+  }
+];
+
+const RODADAS_ORIG = [
+  { data:'09/04', dia:'Quinta', rodada:1,
+    jogos:[
+      {id:'j1', t1:1, t2:2, gol1:null, gol2:null},
+      {id:'j2', t1:3, t2:4, gol1:null, gol2:null}
+    ],
+    folga:5
+  },
+  { data:'16/04', dia:'Quinta', rodada:2,
+    jogos:[
+      {id:'j3', t1:2, t2:5, gol1:null, gol2:null},
+      {id:'j4', t1:1, t2:3, gol1:null, gol2:null}
+    ],
+    folga:4
+  },
+  { data:'21/04', dia:'Terça', rodada:3,
+    jogos:[
+      {id:'j5', t1:1, t2:4, gol1:null, gol2:null},
+      {id:'j6', t1:3, t2:5, gol1:null, gol2:null}
+    ],
+    folga:2
+  },
+  { data:'23/04', dia:'Quinta', rodada:4,
+    jogos:[
+      {id:'j7', t1:2, t2:4, gol1:null, gol2:null},
+      {id:'j8', t1:1, t2:5, gol1:null, gol2:null}
+    ],
+    folga:3
+  },
+  { data:'28/04', dia:'Terça', rodada:5,
+    jogos:[
+      {id:'j9', t1:2, t2:3, gol1:null, gol2:null},
+      {id:'j10', t1:4, t2:5, gol1:null, gol2:null}
+    ],
+    folga:1
+  }
+];
+
+const REGULAMENTO = [
+  {art:'Art. 1º – Da Participação', texto:'Poderão participar atletas que tenham jogado às terças e quintas com o grupo 30tões, desde que inativos de atividades profissionais durante as partidas.'},
+  {art:'Art. 2º – Obrigatoriedade de Participação', texto:'Todos os jogadores inscritos na súmula devem atuar por no mínimo 1 minuto. O descumprimento implica perda de 3 pontos pela equipe infratora.'},
+  {art:'Art. 3º – Do Goleiro', texto:'O goleiro não poderá ultrapassar a linha do meio da quadra. O descumprimento pode resultar em sanção definida pela arbitragem.'},
+  {art:'Art. 4º – Disciplina e Conduta', texto:'Em caso de briga, agressão ou conduta antidesportiva grave: os envolvidos são expulsos e suspensos do restante do torneio.'},
+  {art:'Art. 5º – Comparecimento das Equipes', texto:'As equipes devem comparecer com o número mínimo de atletas. Faltosos sem justificativa serão suspensos das competições do grupo 30tões e dos eventos dos Trintões apoiados pela Prefeitura.'},
+  {art:'Art. 6º – Uniforme e Equipamentos', texto:'Obrigatório: (I) Tênis adequado para futsal; (II) Calção sem bolso; (III) Camisa padronizada.'},
+  {art:'Art. 7º – Sistema de Disputa', texto:'Fase de Grupos: todos contra todos (5 rodadas, uma equipe por folga). Fase Final: 4 melhores classificados. Semifinais: 1º×4º e 2º×3º. Final e 3º lugar em 05/05.'},
+  {art:'Art. 8º – Pontuação & Desempate', texto:'Vitória: 3 pts | Empate: 1 pt | Derrota: 0 pts. Desempate: Nº de vitórias → Saldo de gols → Gols marcados → Gols sofridos (menor) → Sorteio.'},
+  {art:'Art. 9º – Arbitragem', texto:'A arbitragem conduz as partidas e aplica as regras. As decisões dentro de quadra são soberanas.'},
+  {art:'Art. 10º – Duração das Partidas', texto:'A duração será definida pela organização antes do início do torneio.'},
+  {art:'Art. 11º – Substituições', texto:'Substituições livres conforme as regras oficiais do futsal.'},
+  {art:'Art. 12º – Penalidades', texto:'Cartões e punições conforme regras oficiais. A organização pode aplicar sanções adicionais em casos disciplinares.'},
+  {art:'Art. 13º – Da Organização', texto:'Compete à organização: elaborar tabela e horários, definir arbitragem, resolver situações administrativas e garantir o bom andamento do torneio.'},
+  {art:'Art. 14º – Disposições Finais', texto:'Os casos omissos serão resolvidos pela organização do torneio.'},
+];
+
+const ADMIN_PWD = 'master2026';
+
+// ============================================================
+//  STATE (localStorage)
+// ============================================================
+
+function getResultados() {
+  try { return JSON.parse(localStorage.getItem('tfm_resultados') || '{}'); } catch(e) { return {}; }
+}
+function saveResultados(r) {
+  localStorage.setItem('tfm_resultados', JSON.stringify(r));
+}
+
+function getRodadas() {
+  const res = getResultados();
+  return RODADAS_ORIG.map(rod => ({
+    ...rod,
+    jogos: rod.jogos.map(j => ({
+      ...j,
+      gol1: res[j.id] !== undefined ? res[j.id].gol1 : null,
+      gol2: res[j.id] !== undefined ? res[j.id].gol2 : null,
+    }))
+  }));
+}
+
+// ============================================================
+//  CLASSIFICAÇÃO
+// ============================================================
+
+function calcClassificacao() {
+  const rodadas = getRodadas();
+  const stats = {};
+  TIMES.forEach(t => {
+    stats[t.id] = {id:t.id, nome:t.nome, pj:0, v:0, e:0, d:0, gp:0, gc:0, pts:0};
+  });
+  rodadas.forEach(rod => {
+    rod.jogos.forEach(j => {
+      if (j.gol1 === null || j.gol2 === null) return;
+      const g1 = parseInt(j.gol1), g2 = parseInt(j.gol2);
+      const s1 = stats[j.t1], s2 = stats[j.t2];
+      s1.pj++; s2.pj++;
+      s1.gp += g1; s1.gc += g2;
+      s2.gp += g2; s2.gc += g1;
+      if (g1 > g2)      { s1.v++; s1.pts+=3; s2.d++; }
+      else if (g1 < g2) { s2.v++; s2.pts+=3; s1.d++; }
+      else              { s1.e++; s1.pts++; s2.e++; s2.pts++; }
+    });
+  });
+  const arr = Object.values(stats);
+  arr.sort((a,b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts;
+    if (b.v   !== a.v)   return b.v - a.v;
+    const sgA = a.gp - a.gc, sgB = b.gp - b.gc;
+    if (sgB !== sgA) return sgB - sgA;
+    if (b.gp !== a.gp) return b.gp - a.gp;
+    return a.gc - b.gc;
+  });
+  return arr;
+}
+
+function renderClassificacao() {
+  const tab = calcClassificacao();
+  const tbody = document.getElementById('tabela-body');
+  tbody.innerHTML = '';
+  tab.forEach((t,i) => {
+    const sg = t.gp - t.gc;
+    const q = i < 4;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank-cell">${i+1}</td>
+      <td class="team-name-cell">
+        ${t.nome}
+        <span class="qual-badge ${q?'qual-green':'qual-gray'}">${q?'SEMI':'—'}</span>
+      </td>
+      <td>${t.pj}</td>
+      <td>${t.v}</td>
+      <td>${t.e}</td>
+      <td>${t.d}</td>
+      <td>${t.gp}</td>
+      <td>${t.gc}</td>
+      <td style="color:${sg>0?'#6ee0a5':sg<0?'#f1948a':'inherit'}">${sg>0?'+'+sg:sg}</td>
+      <td class="pts-cell">${t.pts}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Stats summary
+  const rod = getRodadas();
+  let jogados = 0, totalGols = 0;
+  rod.forEach(r => r.jogos.forEach(j => {
+    if (j.gol1!==null && j.gol2!==null) { jogados++; totalGols+=parseInt(j.gol1)+parseInt(j.gol2); }
+  }));
+  const totalJogos = rod.reduce((s,r) => s+r.jogos.length,0);
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-box"><div class="val">${totalJogos}</div><div class="lbl">Total de Jogos</div></div>
+    <div class="stat-box"><div class="val">${jogados}</div><div class="lbl">Realizados</div></div>
+    <div class="stat-box"><div class="val">${totalJogos-jogados}</div><div class="lbl">A Realizar</div></div>
+    <div class="stat-box"><div class="val">${totalGols}</div><div class="lbl">Gols Marcados</div></div>
+    <div class="stat-box"><div class="val">${jogados>0?(totalGols/jogados).toFixed(1):'-'}</div><div class="lbl">Média de Gols</div></div>
+  `;
+}
+
+// ============================================================
+//  JOGOS
+// ============================================================
+
+function nomeTime(id) { return TIMES.find(t=>t.id===id)?.nome || 'Time '+id; }
+
+function renderJogos() {
+  const rodadas = getRodadas();
+  const grid = document.getElementById('jogos-grid');
+  grid.innerHTML = '';
+  rodadas.forEach(rod => {
+    const label = document.createElement('div');
+    label.className = 'rodada-label';
+    label.innerHTML = `RODADA ${rod.rodada} &bull; ${rod.data} (${rod.dia})`;
+    grid.appendChild(label);
+    rod.jogos.forEach((j,ji) => {
+      const played = j.gol1 !== null && j.gol2 !== null;
+      const g1 = played ? parseInt(j.gol1) : null;
+      const g2 = played ? parseInt(j.gol2) : null;
+      const card = document.createElement('div');
+      card.className = `jogo-card ${played?'played':'upcoming'}`;
+      const scoreHTML = played
+        ? `<span class="score-num ${g1>g2?'winner':''}">${g1}</span><span class="score-sep">×</span><span class="score-num ${g2>g1?'winner':''}">${g2}</span>`
+        : `<span class="score-vs">VS</span>`;
+      card.innerHTML = `
+        <div class="jogo-date">
+          <div class="day">${rod.data.split('/')[0]}</div>
+          <div class="month">${['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'][parseInt(rod.data.split('/')[1])-1]}</div>
+          <div class="weekday">${rod.dia}</div>
+        </div>
+        <div class="jogo-divider"></div>
+        <div class="jogo-teams">
+          <div class="jogo-team">${nomeTime(j.t1)}</div>
+          <div class="jogo-score">${scoreHTML}</div>
+          <div class="jogo-team away">${nomeTime(j.t2)}</div>
+        </div>
+        <div class="jogo-status">
+          <span class="status-pill ${played?'status-played':'status-upcoming'}">${played?'ENCERRADO':'A JOGAR'}</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    // Folga
+    const folgaDiv = document.createElement('div');
+    folgaDiv.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 0;font-family:"Barlow Condensed",sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.3);';
+    folgaDiv.innerHTML = `🛋️ Folga: <strong style="color:rgba(245,197,24,0.5)">${nomeTime(rod.folga)}</strong>`;
+    grid.appendChild(folgaDiv);
+  });
+}
+
+// ============================================================
+//  ELENCOS
+// ============================================================
+
+function renderElencos() {
+  const grid = document.getElementById('times-grid');
+  grid.innerHTML = '';
+  TIMES.filter(t=>t.jogadores.length>0).forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'time-card';
+    const playersHTML = t.jogadores.map((p,i) => `
+      <div class="player-row">
+        <span class="player-num">${i+1}</span>
+        <span>${p.nome}</span>
+        ${p.gol ? '<span class="gol-badge">🧤 GOL</span>' : ''}
+      </div>
+    `).join('');
+    card.innerHTML = `
+      <div class="time-header">
+        <h4>${t.nome}</h4>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;opacity:0.6;">${t.jogadores.length} atletas</span>
+      </div>
+      <div class="time-players">${playersHTML}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+//  REGULAMENTO
+// ============================================================
+
+function renderRegulamento() {
+  const grid = document.getElementById('reg-grid');
+  grid.innerHTML = '';
+  REGULAMENTO.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'reg-article';
+    div.innerHTML = `<h4>${r.art}</h4><p>${r.texto}</p>`;
+    grid.appendChild(div);
+  });
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(b => { if (b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active'); });
+  if (id === 'classificacao') renderClassificacao();
+  if (id === 'jogos') renderJogos();
+  if (id === 'admin') renderAdminJogos();
+}
+
+// ============================================================
+//  ADMIN
+// ============================================================
+
+let adminLoggedIn = localStorage.getItem('tfm_admin') === '1';
+
+function checkAdminState() {
+  if (adminLoggedIn) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-dashboard').classList.add('active');
+    preencherSelectJogo();
+    renderAdminJogos();
+    renderAdminStats();
+  } else {
+    document.getElementById('admin-login').style.display = 'block';
+    document.getElementById('admin-dashboard').classList.remove('active');
+  }
+}
+
+function adminLogin() {
+  const pwd = document.getElementById('admin-pwd').value;
+  if (pwd === ADMIN_PWD) {
+    adminLoggedIn = true;
+    localStorage.setItem('tfm_admin','1');
+    document.getElementById('login-error').classList.remove('show');
+    checkAdminState();
+    showToast('✅ Acesso liberado!');
+  } else {
+    document.getElementById('login-error').classList.add('show');
+    document.getElementById('admin-pwd').value = '';
+  }
+}
+
+function adminLogout() {
+  adminLoggedIn = false;
+  localStorage.removeItem('tfm_admin');
+  checkAdminState();
+}
+
+function showAdminTab(id) {
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('admin-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id==='reset') renderAdminStats();
+}
+
+function preencherSelectJogo() {
+  const sel = document.getElementById('select-jogo');
+  sel.innerHTML = '<option value="">— Escolha o jogo —</option>';
+  RODADAS_ORIG.forEach(rod => {
+    rod.jogos.forEach((j,ji) => {
+      const opt = document.createElement('option');
+      opt.value = j.id;
+      opt.textContent = `${rod.data} | Jogo ${ji+1}: ${nomeTime(j.t1)} × ${nomeTime(j.t2)}`;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function preencherJogo() {
+  const jid = document.getElementById('select-jogo').value;
+  if (!jid) return;
+  let jogo = null, rod = null;
+  RODADAS_ORIG.forEach(r => { const f = r.jogos.find(j=>j.id===jid); if(f){jogo=f;rod=r;} });
+  if (!jogo) return;
+  document.getElementById('label-time1').textContent = nomeTime(jogo.t1);
+  document.getElementById('label-time2').textContent = nomeTime(jogo.t2);
+  const res = getResultados();
+  if (res[jid]) {
+    document.getElementById('gols-time1').value = res[jid].gol1;
+    document.getElementById('gols-time2').value = res[jid].gol2;
+  } else {
+    document.getElementById('gols-time1').value = '';
+    document.getElementById('gols-time2').value = '';
+  }
+}
+
+function salvarResultado() {
+  const jid = document.getElementById('select-jogo').value;
+  const g1 = document.getElementById('gols-time1').value;
+  const g2 = document.getElementById('gols-time2').value;
+  if (!jid) { showToast('⚠️ Selecione um jogo!'); return; }
+  if (g1 === '' || g2 === '') { showToast('⚠️ Informe os dois placares!'); return; }
+  const res = getResultados();
+  res[jid] = { gol1: parseInt(g1), gol2: parseInt(g2) };
+  saveResultados(res);
+  document.getElementById('res-success').classList.add('show');
+  setTimeout(() => document.getElementById('res-success').classList.remove('show'), 3000);
+  renderAdminJogos();
+  showToast('✅ Resultado salvo!');
+}
+
+function limparResultado() {
+  const jid = document.getElementById('select-jogo').value;
+  if (!jid) return;
+  const res = getResultados();
+  delete res[jid];
+  saveResultados(res);
+  document.getElementById('gols-time1').value = '';
+  document.getElementById('gols-time2').value = '';
+  renderAdminJogos();
+  showToast('🗑️ Resultado removido');
+}
+
+function renderAdminJogos() {
+  const list = document.getElementById('jogos-list-admin');
+  if (!list) return;
+  const res = getResultados();
+  list.innerHTML = '';
+  RODADAS_ORIG.forEach(rod => {
+    rod.jogos.forEach(j => {
+      const saved = res[j.id];
+      const div = document.createElement('div');
+      div.className = 'jogo-admin-row';
+      div.innerHTML = `
+        <div class="jogo-admin-info">
+          <div class="teams">${nomeTime(j.t1)} × ${nomeTime(j.t2)}</div>
+          <div class="date-info">📅 ${rod.data} (${rod.dia})</div>
+        </div>
+        <div class="jogo-admin-score">
+          <input type="number" class="score-input input-group input" id="ai_g1_${j.id}" min="0" value="${saved?saved.gol1:''}" placeholder="–">
+          <span style="font-family:'Bebas Neue';font-size:1.3rem;color:rgba(255,255,255,0.3)">×</span>
+          <input type="number" class="score-input input-group input" id="ai_g2_${j.id}" min="0" value="${saved?saved.gol2:''}" placeholder="–">
+        </div>
+        <button class="btn btn-success btn-sm" onclick="salvarDireto('${j.id}')">💾</button>
+        ${saved ? `<button class="btn btn-danger btn-sm" onclick="deletarDireto('${j.id}')">×</button>` : ''}
+      `;
+      list.appendChild(div);
+    });
+  });
+}
+
+function salvarDireto(jid) {
+  const g1 = document.getElementById('ai_g1_'+jid).value;
+  const g2 = document.getElementById('ai_g2_'+jid).value;
+  if (g1===''||g2==='') { showToast('⚠️ Preencha os dois campos'); return; }
+  const res = getResultados();
+  res[jid] = {gol1:parseInt(g1), gol2:parseInt(g2)};
+  saveResultados(res);
+  renderAdminJogos();
+  showToast('✅ Salvo!');
+}
+
+function deletarDireto(jid) {
+  const res = getResultados();
+  delete res[jid];
+  saveResultados(res);
+  renderAdminJogos();
+  showToast('🗑️ Removido');
+}
+
+function resetResultados() {
+  if (!confirm('Tem certeza? Isso apagará TODOS os resultados!')) return;
+  saveResultados({});
+  renderAdminJogos();
+  renderAdminStats();
+  showToast('🗑️ Resultados resetados');
+}
+
+function renderAdminStats() {
+  const rod = getRodadas();
+  let jogados=0, totalGols=0;
+  rod.forEach(r=>r.jogos.forEach(j=>{if(j.gol1!==null&&j.gol2!==null){jogados++;totalGols+=parseInt(j.gol1)+parseInt(j.gol2);}}));
+  const total = rod.reduce((s,r)=>s+r.jogos.length,0);
+  document.getElementById('admin-stats-txt').innerHTML = `
+    Total de jogos: <strong style="color:var(--gold)">${total}</strong><br>
+    Jogos realizados: <strong style="color:#6ee0a5">${jogados}</strong><br>
+    Jogos pendentes: <strong style="color:#f1948a">${total-jogados}</strong><br>
+    Total de gols: <strong style="color:var(--gold)">${totalGols}</strong>
+  `;
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+renderClassificacao();
+renderJogos();
+renderElencos();
+renderRegulamento();
+checkAdminState();
+
+// Aplicar resultado inicial do dia 09/04 conforme informado
+(function applyInitialResults(){
+  const res = getResultados();
+  if (!res['j1']) res['j1'] = {gol1:4, gol2:10};
+  if (!res['j2']) res['j2'] = {gol1:4, gol2:10};
+  saveResultados(res);
+  renderClassificacao();
+  renderJogos();
+})();
+
+</script>
+</body>
+</html>
